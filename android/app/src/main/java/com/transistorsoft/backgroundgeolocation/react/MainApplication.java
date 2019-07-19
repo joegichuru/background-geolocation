@@ -1,10 +1,12 @@
-package com.transistorsoft.backgroundgeolocation.react;
+//package com.transistorsoft.backgroundgeolocation.react;
 
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.swmansion.gesturehandler.RNGestureHandlerPackage;
-import com.transistorsoft.rnbackgroundgeolocation.RNBackgroundGeolocation;
+
+import com.transistorsoft.rnbackgroundgeolocation.*;
+
 import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;

@@ -5,7 +5,6 @@
 	};
 	objectVersion = 46;
 	objects = {
-
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* BGGeolocationTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* BGGeolocationTests.m */; };
 		068B8CFD388A327A7A7A6D9E /* libPods-BGGeolocationTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C60CEEDB7F5725CF4B64599E /* libPods-BGGeolocationTests.a */; };
@@ -33,7 +32,6 @@
 		C59D01E78E46497AAEE50E49 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 726C873515D34C7F92E264A5 /* Roboto.ttf */; };
 		C77DF7623B524061B6E51730 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C5DBC12D2FD74B0CBD138645 /* MaterialIcons.ttf */; };
 		D2CC0DCCBDE34A679AB6421E /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C9AD4F4F1DD240EA8216E06A /* Foundation.ttf */; };
-		E77D7044F1C841658282EE0F /* TSLocationManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 66475E257F6D40289F7F2B54 /* TSLocationManager.framework */; };
 		E8008F0493AE46ECB2D36E68 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CA06CDC1291741B4B5479699 /* Zocial.ttf */; };
 		F72EE9E79F2F4DB38EF8E262 /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3E60FCF9788645328CC79BD5 /* FontAwesome.ttf */; };
 /* End PBXBuildFile section */
@@ -81,7 +79,6 @@
 		3FE5155B606648A992B90E4D /* Ionicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Ionicons.ttf; path = "../node_modules/native-base/Fonts/Ionicons.ttf"; sourceTree = "<group>"; };
 		527CA182BBAF469987F6F68A /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../node_modules/native-base/Fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 		5F17CF3C591C42A4BADC8CD3 /* RNBackgroundFetch+AppDelegate.m */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 4; includeInIndex = 0; lastKnownFileType = sourcecode.c.objc; name = "RNBackgroundFetch+AppDelegate.m"; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/RNBackgroundFetch+AppDelegate.m"; sourceTree = "<group>"; };
-		66475E257F6D40289F7F2B54 /* TSLocationManager.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = TSLocationManager.framework; path = "../node_modules/react-native-background-geolocation/ios/RNBackgroundGeolocation/TSLocationManager.framework"; sourceTree = SDKROOT; };
 		6B6FAE3C62914884B5797BC6 /* TSBackgroundFetch.framework */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = wrapper.framework; name = TSBackgroundFetch.framework; path = "../node_modules/react-native-background-fetch/ios/RNBackgroundFetch/TSBackgroundFetch.framework"; sourceTree = SDKROOT; };
 		726C873515D34C7F92E264A5 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		8391CDCA3FDE4DC9BBB4D606 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/native-base/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -110,7 +107,6 @@
 			files = (
 				4B56365662A9197DE7F947D3 /* libPods-BGGeolocation.a in Frameworks */,
 				8B3535BB3DBC47CEADC15D81 /* TSBackgroundFetch.framework in Frameworks */,
-				E77D7044F1C841658282EE0F /* TSLocationManager.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -181,7 +177,6 @@
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
 				06C390CEDD64A61A3677EC06 /* libPods-BGGeolocation.a */,
 				6B6FAE3C62914884B5797BC6 /* TSBackgroundFetch.framework */,
-				66475E257F6D40289F7F2B54 /* TSLocationManager.framework */,
 				C60CEEDB7F5725CF4B64599E /* libPods-BGGeolocationTests.a */,
 			);
 			name = Frameworks;
@@ -343,11 +338,6 @@
 					};
 					13B07F861A680F5B00A75B9A = {
 						DevelopmentTeam = 32A636YFGZ;
-						SystemCapabilities = {
-							com.apple.BackgroundModes = {
-								enabled = true;
-							};
-						};
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
