@@ -268,7 +268,7 @@ export default class SimpleMap extends Component<{}> {
   }
 
   onEnteredPOI(newPOIName) {
-    navigator.geolocation.getCurrentPosition(
+    BackgroundGeolocation.getCurrentPosition({persist: false, samples: 1},
       (position) => {
         AsyncStorage.getItem('@mmp:POIs', (err, item) => this.addPOIToStorage(item, position, newPOIName));
       }
@@ -286,7 +286,7 @@ export default class SimpleMap extends Component<{}> {
   }
 
   onGoToLocation() {
-    navigator.geolocation.getCurrentPosition(
+    BackgroundGeolocation.getCurrentPosition({persist: false, samples: 1},
       (position) => {
         let curr_latitude = position.coords.latitude;
         let curr_longitude = position.coords.longitude;
