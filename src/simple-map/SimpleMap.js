@@ -3,13 +3,14 @@ import {
   Platform,
   StyleSheet,
   View,
-  AsyncStorage,
   TouchableHighlight,
   Modal,
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
 } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 // For dispatching back to HomeScreen
 import App from '../App';

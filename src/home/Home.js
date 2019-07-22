@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import {
   Platform,
   StyleSheet,
-  AsyncStorage,
   Alert,
   Linking,
   Image,
@@ -11,6 +10,9 @@ import {
   View,
   ActivityIndicator
 } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
+
 import { NavigationActions, StackActions } from 'react-navigation';
 import {
   Container, Header, Content, Footer,

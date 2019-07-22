@@ -6,9 +6,10 @@
 import React, { Component } from 'react';
 import {
   View,
-  AsyncStorage,
   StatusBar
 } from 'react-native';
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import { NavigationActions, StackActions } from 'react-navigation';
 

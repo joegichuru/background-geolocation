@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 
-import {StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableHighlight, Image, ImageBackground, AsyncStorage, ScrollView, ActivityIndicator} from "react-native";
+import {StyleSheet, Text, View, TextInput, TouchableOpacity, TouchableHighlight, Image, ImageBackground, ScrollView, ActivityIndicator} from "react-native";
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import LoginForm from '../../components/loginform';
 
@@ -19,8 +21,6 @@ import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';  
   
 import Navigator from '../Navigator';
-
-import App from '../App';
 
 export default class StartPage extends Component {
     constructor(props) {

@@ -12,13 +12,14 @@
 */
 import React, { Component } from 'react';
 import {
-  AsyncStorage,
   View,
   Text,
   StyleSheet
 } from 'react-native';
 
-import { createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import { createAppContainer, createStackNavigator, StackActions, NavigationActions } from 'react-navigation';
 
 import Home from './home/Home';
 import HelloWorld from './hello-world/HelloWorld';
@@ -68,7 +69,9 @@ class Root extends Component<{}> {
   }
 }
 
-export default Navigator = createStackNavigator({
+
+
+const AppNavigator = createStackNavigator({
   Root: {
     screen: Root,
   },
@@ -97,3 +100,5 @@ export default Navigator = createStackNavigator({
     let routeName = transition.scene.route.routeName;
   }
 });
+
+export default createAppContainer(AppNavigator);

@@ -7,11 +7,12 @@ import {StyleSheet,
     TouchableOpacity,
     Image,
     ImageBackground,
-    AsyncStorage,
     ScrollView,
     ActivityIndicator,
     KeyboardAvoidingView,
 } from "react-native";
+
+import AsyncStorage from '@react-native-community/async-storage';
 
 import LoginForm from '../../components/loginform';
 
