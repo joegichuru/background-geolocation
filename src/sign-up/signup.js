@@ -24,13 +24,19 @@ import Navigator from '../Navigator';
 
 import App from '../App';
 
-export default class LoginScreen extends Component {
+export default class SignupScreen extends Component {
     constructor(props) {
         super(props);
         let navigation = props.navigation;
         this.state = {
+            firstnameValue: '',
+            lastnameValue: '',
+            companyNameValue: '',
+            emailAddressValue: '',
             usernameValue: '',
             passwordValue: '',
+            confirmPasswordValue: '',
+            formValid: false,
             token: '',
             loggingIn: false,
             loginError: false,
@@ -40,14 +46,32 @@ export default class LoginScreen extends Component {
         AsyncStorage.getItem('mmp_username').then((value) => {this.setState({usernameValue: value || ''})});
         AsyncStorage.getItem('mmp_password').then((value) => {this.setState({passwordValue: value || ''})});
         changeUsername = (text) => {
-            this.state.usernameValue = text;
-            console.log('Username is: ' + text);
-            console.log('And in state - ' + this.state.usernameValue);
+            this.setState({usernameValue: text},
+                () => this.doFormValidation());
         }
         changePassword = (text) => {
-            this.state.passwordValue = text;
-            console.log('Password is: ' + text);
-            console.log('And in state - ' + this.state.passwordValue);
+            this.setState({passwordValue: text},
+                () => this.doFormValidation());
+        }
+        changeConfirmPassword = (text) => {
+            this.setState({confirmPasswordValue: text},
+                () => this.doFormValidation());
+        }
+        changeEmail = (text) => {
+            this.setState({emailAddressValue: text},
+                () => this.doFormValidation());
+        }
+        changeFirstName = (text) => {
+            this.setState({firstnameValue: text},
+                () => this.doFormValidation());
+        }
+        changeLastName = (text) => {
+            this.setState({lastnameValue: text},
+                () => this.doFormValidation());
+        }
+        changeCompanyName = (text) => {
+            this.setState({companyNameValue: text},
+                () => this.doFormValidation());
         }
         onLoginPressButton = () => {
             console.log('State is: ' + JSON.stringify(this.state));
@@ -108,20 +132,40 @@ export default class LoginScreen extends Component {
         });  
         this.props.navigation.dispatch(navigateAction);        
     }
-        
+
+    validateEmailAddress(text) {
+        let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ ;
+        if(reg.test(text) === false)
+            return false;
+        return true;
+    }
+
+    doFormValidation() {
+        this.setState({formValid: 
+            (this.state.usernameValue.length >= 4 &&
+            this.state.passwordValue.length >= 6 && (this.state.passwordValue.localeCompare(this.state.confirmPasswordValue) == 0) &&
+            this.validateEmailAddress(this.state.emailAddressValue) &&
+            this.state.firstnameValue.length > 0 &&
+            this.state.lastnameValue.length > 0 &&
+            this.state.companyNameValue.length > 0)
+        });
+    }
+
 render() {
     return (
-            <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
-                <View style={styles.logocontainer}>
-                    <Image source={require('../../images/MMP.png')} style={styles.logo} />
-                </View>
-                <View style={styles.loginform}>
+            <KeyboardAvoidingView style={styles.container} behavior="padding">
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.firstnameValue.toString().toLocaleLowerCase()} placeholder='First Name' style={styles.textinput} autoCapitalize='words' onChangeText={changeFirstName} />
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.lastnameValue.toString().toLocaleLowerCase()} placeholder='Last Name' style={styles.textinput} autoCapitalize='words' onChangeText={changeLastName} />
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.companyNameValue.toString().toLocaleLowerCase()} placeholder='Company Name' style={styles.textinput} autoCapitalize='words' onChangeText={changeCompanyName} />
                     <TextInput underlineColorAndroid='transparent' defaultValue={this.state.usernameValue.toString().toLocaleLowerCase()} placeholder='Username' style={styles.textinput} autoCapitalize='none' onChangeText={changeUsername} />
-                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.passwordValue} placeholder='Password' secureTextEntry={true} autoCapitalize='none' style={styles.textinput}  onChangeText={changePassword} />
-                    <TouchableOpacity style={styles.loginbtn} onPress={onLoginPressButton}>
-                        <Text style={styles.infotext}>Login</Text>
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.emailAddressValue.toString().toLocaleLowerCase()} placeholder='Email' style={styles.textinput} autoCapitalize='none' onChangeText={changeEmail} keyboardType='email-address' />
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.passwordValue} placeholder='Password' secureTextEntry={true} autoCapitalize='none' style={styles.textinput} onChangeText={changePassword} />
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.confirmPasswordValue} placeholder='Confirm password' secureTextEntry={true} autoCapitalize='none' style={styles.textinput} onChangeText={changeConfirmPassword} />
+
+                    <TouchableOpacity style={styles.loginbtn} onPress={onLoginPressButton} disabled={!this.state.formValid}>
+                        <Text style={styles.infotext}>Sign Up</Text>
                     </ TouchableOpacity>
-                    <Text>New to MMP? <Text onPress={()=> this.onClickNavigate('SignupScreen')} style = {{ color: '#00f' }}>Sign up now</Text>.</Text>
+                    <Text>Have an MMP account? <Text onPress={()=> this.onClickNavigate('LoginScreen')} style = {{ color: '#00f' }}>Sign in instead</Text>.</Text>
                     <ActivityIndicator size="large" color="darkorange" style={{opacity: this.state.loggingIn ? 1.0 : 0.0, marginTop: 10}}  animating={true} />
                     <Text style={{color: 'red', fontWeight: 'bold', opacity: this.state.loginError? 1.0: 0.0}}>
                         Login error:
@@ -129,7 +173,6 @@ render() {
                     <Text style={{color: 'red', opacity: this.state.loginErrorMessage != null? 1.0: 0.0}}>
                         {this.state.loginErrorMessage}
                     </Text>
-                </View>
             </KeyboardAvoidingView>
     );
   }

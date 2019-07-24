@@ -26,6 +26,7 @@ import HelloWorld from './hello-world/HelloWorld';
 import SimpleMap from './simple-map/SimpleMap';
 import AdvancedApp from './advanced/AdvancedApp';
 import LoginScreen from './loginscreen/loginscreen';
+import SignupScreen from './sign-up/signup'
 import StartPage from './startpage/StartPage';
 
 class Root extends Component<{}> {  
@@ -89,6 +90,9 @@ const AppNavigator = createStackNavigator({
   },
   LoginScreen: {
     screen: LoginScreen
+  },
+  SignupScreen : {
+    screen: SignupScreen
   },
   StartPage: {
     screen: StartPage
