@@ -10,6 +10,7 @@ import {StyleSheet,
     ScrollView,
     ActivityIndicator,
     KeyboardAvoidingView,
+    Platform
 } from "react-native";
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -26,6 +27,7 @@ import App from '../App';
 
 export default class SignupScreen extends Component {
     constructor(props) {
+        var offset = (Platform.OS === 'android') ? -500 : 0;
         super(props);
         let navigation = props.navigation;
         this.state = {
@@ -40,7 +42,7 @@ export default class SignupScreen extends Component {
             token: '',
             loggingIn: false,
             loginError: false,
-            loginErrorMessage: null
+            registerErrorMessage: null
         }
         
         AsyncStorage.getItem('mmp_username').then((value) => {this.setState({usernameValue: value || ''})});
@@ -78,10 +80,10 @@ export default class SignupScreen extends Component {
             this.setState({
                 loggingIn: true,
                 loginError: false,
-                loginErrorMessage: null
+                registerErrorMessage: null
             });                          
 
-            fetch('https://managemyapi.azurewebsites.net/Mobile.asmx/AuthRequest', {
+            fetch('https://managemyapi.azurewebsites.net/Mobile.asmx/RegisterRequest', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',
@@ -91,15 +93,22 @@ export default class SignupScreen extends Component {
                 body: JSON.stringify({
                   username: this.state.usernameValue,
                   password: this.state.passwordValue,
-                  device_id: DeviceInfo.getUniqueID()
+                  device_id: DeviceInfo.getUniqueID(),
+                  firstname: this.state.firstnameValue,
+                  lastname: this.state.lastnameValue,
+                  email: this.state.emailAddressValue,
+                  company_name: this.state.companyNameValue,
+                  country_code: "UK",
+                  sp_id: "NSW",
+                  tz_id: "UTC"
                 }),
             })
             .then((response) => response.json())
             .then((responseJson) => {
-                if(responseJson.d.auth_result == 0) {
-                    AsyncStorage.setItem('@mmp:auth_token', responseJson.d.token);
-                    console.log("Auth token is " + responseJson.d.token);
-                    AsyncStorage.setItem('@mmp:user_id', responseJson.d.user.user_id.toString());
+                if(responseJson.d.register_result == 0) {
+                    AsyncStorage.setItem('@mmp:auth_token', responseJson.d.auth_response.token);
+                    console.log("Auth token is " + responseJson.d.auth_response.token);
+                    AsyncStorage.setItem('@mmp:user_id', responseJson.d.auth_response.user.user_id.toString());
                     AsyncStorage.setItem('mmp_username', this.state.usernameValue);
                     AsyncStorage.setItem('mmp_password', this.state.passwordValue);
                     this.onClickNavigate('StartPage');    
@@ -108,8 +117,14 @@ export default class SignupScreen extends Component {
                     this.setState({
                         loggingIn: false,
                         loginError: true,
-                        loginErrorMessage: 'Login failed'
-                    });                    
+                        registerErrorMessage: responseJson.d.register_message
+                    });
+                    // if(responseJson.d.register_result == 200) {
+                    //     // Username taken
+                    // }
+                    // else if(responseJson.d.register_result == 999) {
+                    //     // email taken
+                    // }
                 }
             })
             .catch((error) =>{
@@ -117,7 +132,7 @@ export default class SignupScreen extends Component {
                 this.setState({
                     loggingIn: false,
                     loginError: true,
-                    loginErrorMessage: error
+                    registerErrorMessage: error
                 });                          
             });
         }        
@@ -141,6 +156,7 @@ export default class SignupScreen extends Component {
     }
 
     doFormValidation() {
+        console.log("MMP-Tracker - " + this.state.firstnameValue);
         this.setState({formValid: 
             (this.state.usernameValue.length >= 4 &&
             this.state.passwordValue.length >= 6 && (this.state.passwordValue.localeCompare(this.state.confirmPasswordValue) == 0) &&
@@ -153,7 +169,8 @@ export default class SignupScreen extends Component {
 
 render() {
     return (
-            <KeyboardAvoidingView style={styles.container} behavior="padding">
+            // <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={this.offset}>
+            <KeyboardAvoidingView behavior= {(Platform.OS === 'ios')? "padding" : null} style={styles.container}>
                     <TextInput underlineColorAndroid='transparent' defaultValue={this.state.firstnameValue.toString().toLocaleLowerCase()} placeholder='First Name' style={styles.textinput} autoCapitalize='words' onChangeText={changeFirstName} />
                     <TextInput underlineColorAndroid='transparent' defaultValue={this.state.lastnameValue.toString().toLocaleLowerCase()} placeholder='Last Name' style={styles.textinput} autoCapitalize='words' onChangeText={changeLastName} />
                     <TextInput underlineColorAndroid='transparent' defaultValue={this.state.companyNameValue.toString().toLocaleLowerCase()} placeholder='Company Name' style={styles.textinput} autoCapitalize='words' onChangeText={changeCompanyName} />
@@ -168,10 +185,10 @@ render() {
                     <Text>Have an MMP account? <Text onPress={()=> this.onClickNavigate('LoginScreen')} style = {{ color: '#00f' }}>Sign in instead</Text>.</Text>
                     <ActivityIndicator size="large" color="darkorange" style={{opacity: this.state.loggingIn ? 1.0 : 0.0, marginTop: 10}}  animating={true} />
                     <Text style={{color: 'red', fontWeight: 'bold', opacity: this.state.loginError? 1.0: 0.0}}>
-                        Login error:
+                        Sign up error:
                     </Text>
-                    <Text style={{color: 'red', opacity: this.state.loginErrorMessage != null? 1.0: 0.0}}>
-                        {this.state.loginErrorMessage}
+                    <Text style={{color: 'red', opacity: this.state.registerErrorMessage != null? 1.0: 0.0}}>
+                        {this.state.registerErrorMessage}
                     </Text>
             </KeyboardAvoidingView>
     );
@@ -185,11 +202,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        justifyContent: 'center',
-        alignSelf: 'stretch',
-        width: null,
-        padding: 20,
-        backgroundColor: 'white',
+        padding: 20
     },
     horizontal: {
         flexDirection: 'row',
@@ -221,8 +234,9 @@ const styles = StyleSheet.create({
         backgroundColor: 'orange',
         borderColor: 'grey',
         borderWidth: 0.8,
-        fontSize: 20,
+        fontSize: 16,
         borderRadius: 3,
+        height: 48
     },
     switch: {
         padding: 12,
