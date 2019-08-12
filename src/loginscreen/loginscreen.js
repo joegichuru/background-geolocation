@@ -20,9 +20,6 @@ import { NavigationActions, StackActions } from 'react-navigation';
 import DeviceInfo from 'react-native-device-info';
 
 import {StyleProvider} from "native-base";
-import Navigator from '../Navigator';
-
-import App from '../App';
 
 export default class LoginScreen extends Component {
     constructor(props) {
@@ -37,8 +34,14 @@ export default class LoginScreen extends Component {
             loginErrorMessage: null
         }
         
+    }
+
+    async componentDidMount() {
         AsyncStorage.getItem('mmp_username').then((value) => {this.setState({usernameValue: value || ''})});
         AsyncStorage.getItem('mmp_password').then((value) => {this.setState({passwordValue: value || ''})});
+        AsyncStorage.setItem("@mmp:next_page", 'LoginScreen');
+    }
+
         changeUsername = (text) => {
             this.state.usernameValue = text;
             console.log('Username is: ' + text);
@@ -97,8 +100,6 @@ export default class LoginScreen extends Component {
                 });                          
             });
         }        
-        AsyncStorage.setItem("@mmp:next_page", 'LoginScreen');
-    }
 
 
     onClickNavigate(routeName) {
@@ -116,9 +117,9 @@ render() {
                     <Image source={require('../../images/MMP.png')} style={styles.logo} />
                 </View>
                 <View style={styles.loginform}>
-                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.usernameValue.toString().toLocaleLowerCase()} placeholder='Username' style={styles.textinput} autoCapitalize='none' onChangeText={changeUsername} />
-                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.passwordValue} placeholder='Password' secureTextEntry={true} autoCapitalize='none' style={styles.textinput}  onChangeText={changePassword} />
-                    <TouchableOpacity style={styles.loginbtn} onPress={onLoginPressButton}>
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.usernameValue.toString().toLocaleLowerCase()} placeholder='Username' style={styles.textinput} autoCapitalize='none' onChangeText={this.changeUsername} />
+                    <TextInput underlineColorAndroid='transparent' defaultValue={this.state.passwordValue} placeholder='Password' secureTextEntry={true} autoCapitalize='none' style={styles.textinput}  onChangeText={this.changePassword} />
+                    <TouchableOpacity style={styles.loginbtn} onPress={this.onLoginPressButton}>
                         <Text style={styles.infotext}>Login</Text>
                     </ TouchableOpacity>
                     <Text>New to MMP? <Text onPress={()=> this.onClickNavigate('SignupScreen')} style = {{ color: '#00f' }}>Sign up now</Text>.</Text>

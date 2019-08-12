@@ -28,6 +28,7 @@ import AdvancedApp from './advanced/AdvancedApp';
 import LoginScreen from './loginscreen/loginscreen';
 import SignupScreen from './sign-up/signup'
 import StartPage from './startpage/StartPage';
+import RegistrationSuccess from './registration-success/RegistrationSuccess';
 
 class Root extends Component<{}> {  
   componentDidMount() {
@@ -94,9 +95,12 @@ const AppNavigator = createStackNavigator({
   SignupScreen : {
     screen: SignupScreen
   },
+  RegistrationSuccess: {
+    screen: RegistrationSuccess
+  },
   StartPage: {
     screen: StartPage
-  }
+  },
 }, {
   initialRouteName: 'Root',
   headerMode: 'none',
