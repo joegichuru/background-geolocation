@@ -60,7 +60,7 @@ export default class LoginScreen extends Component {
                 loginErrorMessage: null
             });                          
 
-            fetch('https://managemyapi.azurewebsites.net/Mobile.asmx/AuthRequest', {
+            fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/AuthRequest', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',

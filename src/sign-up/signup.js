@@ -85,7 +85,7 @@ export default class SignupScreen extends Component {
                 registerErrorMessage: null
             });                          
 
-            fetch('https://managemyapi.azurewebsites.net/Mobile.asmx/RegisterRequest', {
+            fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/RegisterRequest', {
                 method: 'POST',
                 headers: {
                   Accept: 'application/json',

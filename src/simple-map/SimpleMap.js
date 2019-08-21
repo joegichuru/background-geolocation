@@ -191,7 +191,7 @@ export default class SimpleMap extends Component<{}> {
       .then((mmp_username) => {
         AsyncStorage.getItem('mmp_password')
         .then((mmp_password) => {
-          fetch('https://managemyapi.azurewebsites.net/Mobile.asmx/AuthRequest', {
+          fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/AuthRequest', {
             method: 'POST',
             headers: {
               Accept: 'application/json',
@@ -629,7 +629,7 @@ export default class SimpleMap extends Component<{}> {
       auth_token: auth_token
     });        
 
-    fetch('https://managemyapi.azurewebsites.net/Mobile.asmx/GetJob', {
+    fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/GetJob', {
         method: 'POST',
         headers: {
           Accept: 'application/json',
@@ -876,7 +876,6 @@ export default class SimpleMap extends Component<{}> {
                 zIndex={0}
               />
             ))}
-
 
             {/* {this.state.missedAddresses.map((address, index) => (
               <Marker
