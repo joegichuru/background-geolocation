@@ -171,7 +171,7 @@ render() {
     return (
             // <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={this.offset}>
             <KeyboardAvoidingView behavior= {(Platform.OS === 'ios')? "padding" : null} style={styles.container}>
-                <View style={{flexDirection:"row"}}>
+                <View style={{flexDirection:"row", marginTop: 20}}>
                     <View style={{flex:1, paddingRight: 5}}>
                         <TextInput underlineColorAndroid='transparent' defaultValue={this.state.firstnameValue.toString()} placeholder='First Name' style={styles.textinput} autoCapitalize='words' onChangeText={this.changeFirstName} />
                     </View>
@@ -204,7 +204,7 @@ render() {
                 <TouchableOpacity style={styles.loginbtn} onPress={this.onSignupPressButton} disabled={!this.state.formValid}>
                     <Text style={styles.infotext}>Sign Up</Text>
                 </ TouchableOpacity>
-                <Text>Have an MMP account? <Text onPress={()=> this.onClickNavigate('LoginScreen')} style = {{ color: '#00f' }}>Sign in instead</Text>.</Text>
+                <Text style={{fontSize: 16}}>Have an MMP account? <Text onPress={()=> this.onClickNavigate('LoginScreen')} style = {{ color: '#00f' }}>Sign in instead</Text>.</Text>
                 <ActivityIndicator size="large" color="darkorange" style={{opacity: this.state.loggingIn ? 1.0 : 0.0, marginTop: 10}}  animating={true} />
                 <Text style={{color: 'red', fontWeight: 'bold', opacity: this.state.loginError? 1.0: 0.0}}>
                     Sign up error:
@@ -278,5 +278,6 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         borderWidth: 0.8,
         borderRadius: 10,
+        marginBottom: 15,
     },
 });
