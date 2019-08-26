@@ -171,7 +171,7 @@ render() {
     return (
             // <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={this.offset}>
             <KeyboardAvoidingView behavior= {(Platform.OS === 'ios')? "padding" : null} style={styles.container}>
-                <View style={{flexDirection:"row", marginTop: 20}}>
+                <View style={{flexDirection:"row", marginTop: 50}}>
                     <View style={{flex:1, paddingRight: 5}}>
                         <TextInput underlineColorAndroid='transparent' defaultValue={this.state.firstnameValue.toString()} placeholder='First Name' style={styles.textinput} autoCapitalize='words' onChangeText={this.changeFirstName} />
                     </View>
