@@ -1003,8 +1003,8 @@ export default class SimpleMap extends Component<{}> {
             <Button onPress={this.onStopTracking.bind(this)} disabled={!this.state.enabled && !this.state.paused} style={styles.btn}>
               <Icon type='MaterialIcons' name='stop' style={!this.state.enabled && !this.state.paused ? styles.btnicondisabled: styles.btnicon}/>
             </Button>
-            <Button onPress={this.onResetMarkers.bind(this)} disabled={this.state.enabled || this.state.coordinates.length == 0} style={styles.btn}>
-              <Icon name='md-refresh' style={this.state.enabled || this.state.coordinates.length == 0 ? styles.btnicondisabled: styles.btnicon}/>
+            <Button onPress={this.onResetMarkers.bind(this)} disabled={this.state.enabled || (this.state.coordinates.length == 0 && this.state.oldTracks.length == 0)} style={styles.btn}>
+              <Icon name='md-refresh' style={this.state.enabled || (this.state.coordinates.length == 0 && this.state.oldTracks.length == 0) ? styles.btnicondisabled: styles.btnicon}/>
             </Button>
             <Button onPress={this.onGoToLocation.bind(this)} style={styles.btn}>
               <Icon name='md-locate' style={this.state.isFollowingUser ? styles.btnicondisabled: styles.btnicon}/>
