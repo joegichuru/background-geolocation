@@ -116,8 +116,8 @@ android {
         applicationId "com.mmp.backgroundgeolocation.react"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 305
-        versionName "3.0.5"
+        versionCode 307
+        versionName "3.0.7"
     }
     splits {
         abi {
@@ -129,15 +129,10 @@ android {
     }
     signingConfigs {
         release {
-            /**
-            * My signing configs for publishing SampleApp to play store.  You won't need this
-            */
-            if (project.hasProperty('RNBACKGROUND_GEOLOCATION_SAMPLEAPP_RELEASE_STORE_FILE')) {
-                storeFile file(RNBACKGROUND_GEOLOCATION_SAMPLEAPP_RELEASE_STORE_FILE)
-                storePassword RNBACKGROUND_GEOLOCATION_SAMPLEAPP_RELEASE_STORE_FILE_RELEASE_STORE_PASSWORD
-                keyAlias RNBACKGROUND_GEOLOCATION_SAMPLEAPP_RELEASE_STORE_FILE_RELEASE_KEY_ALIAS
-                keyPassword RNBACKGROUND_GEOLOCATION_SAMPLEAPP_RELEASE_STORE_FILE_RELEASE_KEY_PASSWORD
-            }
+            storeFile file(MMP_RELEASE_STORE_FILE)
+            storePassword MMP_RELEASE_STORE_PASSWORD
+            keyAlias MMP_RELEASE_KEY_ALIAS
+            keyPassword MMP_RELEASE_KEY_PASSWORD
         }
     }
     buildTypes {
