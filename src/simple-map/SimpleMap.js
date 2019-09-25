@@ -8,6 +8,9 @@ import {
   TextInput,
   ScrollView,
   KeyboardAvoidingView,
+  CameraRoll,
+  Image,
+  PermissionsAndroid 
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -74,7 +77,9 @@ export default class SimpleMap extends Component<{}> {
       textForPOI: '',
       oldTracks: [],
       lastLat: 0.0,
-      lastLong: 0.0
+      lastLong: 0.0,
+      photoModalVisible: false,
+      photos: []
     };
     AsyncStorage.setItem("@mmp:next_page", 'SimpleMap');
 }
@@ -244,6 +249,7 @@ export default class SimpleMap extends Component<{}> {
         averageSpeed: (location.odometer/1000) / ((Date.now() - this.state.trackStartTime) / 3600000.0),
         maxSpeed: location.coords.speed*3.6 > this.state.maxSpeed ? location.coords.speed*3.6 : this.state.maxSpeed,
         trackTimeStr: this.toHHMMSS((Date.now() - this.state.trackStartTime)/1000),
+        lastKnownLocation: location,
       });
     }
 
@@ -279,11 +285,10 @@ export default class SimpleMap extends Component<{}> {
   }
 
   onEnteredPOI(newPOIName) {
-    BackgroundGeolocation.getCurrentPosition({persist: false, samples: 1},
-      (position) => {
-        AsyncStorage.getItem('@mmp:POIs', (err, item) => this.addPOIToStorage(item, position, newPOIName));
-      }
-    );    
+    AsyncStorage.getItem('@mmp:POIs', (err, item) => this.addPOIToStorage(item, this.state.lastKnownLocation, newPOIName));
+    let markers = this.state.markers;
+    markers.push({label: newPOIName, coordinate: this.state.lastKnownLocation.coords});
+    this.setState({markers: markers});    
   }
 
   addPOIToStorage(existingPOIsString, newPOIPosition, newPOIName) {
@@ -444,6 +449,7 @@ export default class SimpleMap extends Component<{}> {
           unreportedCoordinates: []
         });
         AsyncStorage.setItem("@mmp:locations", '{"locations": []}');
+        AsyncStorage.setItem("@mmp:POIs", '');
     })
     .catch((error) =>{
         console.error(error);
@@ -521,7 +527,7 @@ export default class SimpleMap extends Component<{}> {
     
   stringifyTime(timeInput)
   {
-    let timeString =	timeInput.getUTCFullYear().toString() + '-' +
+    let timeString =  timeInput.getUTCFullYear().toString() + '-' +
     this.padDateTimeElements(timeInput.getUTCMonth()+1) + '-' +
     this.padDateTimeElements(timeInput.getUTCDate()) + ' ' +
     this.padDateTimeElements(timeInput.getUTCHours()) + ':' +
@@ -814,7 +820,7 @@ export default class SimpleMap extends Component<{}> {
 
   toHHMMSS(sec_num) {
     if(sec_num == 0)
-      return '';
+      return ''; 
     var hours   = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
     var seconds = Math.floor(sec_num - (hours * 3600) - (minutes * 60));
@@ -826,7 +832,37 @@ export default class SimpleMap extends Component<{}> {
     secondsStr = seconds.toString();
     if (seconds < 10) {secondsStr = "0"+secondsStr;}
     return hoursStr+':'+minutesStr+':'+secondsStr;
-}
+  }
+
+  async _handleButtonPress () {
+    console.log("Photos: _handleButtonPress() called");
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+      {
+          'title': 'Cool App ...',
+          'message': 'App needs access to external storage'
+      }
+    );
+
+    if (granted == PermissionsAndroid.RESULTS.GRANTED){
+      var photos = [];
+      await CameraRoll.getPhotos({
+        first: 20,
+        assetType: 'Photos',
+      })
+      .then(r => {
+        photos = r.edges;
+        console.log("Photos: photos loaded");
+        this.setState({ photos: photos, photoModalVisible: true, poisModalVisible: false });
+      })
+      .catch((err) => {
+        console.log("Photos: error encountered - " + err.toString());
+      });
+    }
+    else {
+      console.log("Photos: permission not granted :(");
+    }
+  }
 
   render() {
     return (
@@ -885,18 +921,14 @@ export default class SimpleMap extends Component<{}> {
               </Marker>))
             } */}
 
-            {/* {this.state.tracks.map((track, index) => (
-              <Polyline
-                key={'track' + index}
-                coordinates={track.points}
-                geodesic={true}
-                strokeColor='rgba(0, 127, 127, 0.6)'
-                strokeWidth={2}
-                zIndex={0}>
-              </Polyline>))
-            } */}
-
-
+            {this.state.markers.map((marker, index) => (
+              <MapView.Marker
+                key={'POI' + index}
+                title={marker.label}
+                coordinate={marker.coordinate}
+                anchor={{x:0, y:0.1}}>
+              </MapView.Marker>))
+            }
 
             {this.state.jobPolygons.map((polygon, index) => (
               <MapView.Polygon
@@ -909,6 +941,31 @@ export default class SimpleMap extends Component<{}> {
             ))}
             </MapView>
 
+          {/* <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.photoModalVisible}
+            onRequestClose={() => {
+              Alert.alert('Modal has been closed.');
+            }}>
+            <View style={{marginTop: 50, marginBottom: 120, marginLeft: 20, marginRight: 20, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+              <ScrollView>
+                {this.state.photos.map((p, i) => {
+                  return (
+                    <Image
+                      key={i}
+                      // style={{
+                      //   width: 300,
+                      //   height: 100,
+                      // }}
+                      source={{ uri: p.node.image.uri }}
+                    />
+                  );
+                })}
+              </ScrollView>
+            </View>
+          </Modal> */}
+
           <Modal
             animationType="slide"
             transparent={true}
@@ -916,7 +973,7 @@ export default class SimpleMap extends Component<{}> {
             onRequestClose={() => {
               Alert.alert('Modal has been closed.');
             }}>
-            <View style={{marginTop: 20, marginBottom: 120, marginLeft: 20, marginRight: 20, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+            <View style={{marginTop: 50, marginBottom: 120, marginLeft: 20, marginRight: 20, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
               <ScrollView>
                 <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                   <Button onPress={() => this.setModalVisible(!this.state.modalVisible)} style={{backgroundColor: 'transparent'}}>
@@ -942,7 +999,7 @@ export default class SimpleMap extends Component<{}> {
             onRequestClose={() => {
               Alert.alert('Modal has been closed.');
             }}>
-            <View style={{marginTop: 20, marginBottom: 120, marginLeft: 20, marginRight: 20, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
+            <View style={{marginTop: 50, marginBottom: 120, marginLeft: 20, marginRight: 20, backgroundColor: 'rgba(255, 255, 255, 0.8)'}}>
               <ScrollView>
                 <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>
                   <Button onPress={() => this.setPoisModalVisible(!this.state.poisModalVisible)} style={{backgroundColor: 'transparent'}}>
@@ -977,12 +1034,15 @@ export default class SimpleMap extends Component<{}> {
                     placeholder = 'POI description'
                   />       
                   <Button
-                    style={styles.poibtn}
-                    title='Load empty map'
+                    style={styles.poibtn} title='Add bespoke POI' 
                     onPress={() => this.onEnteredPOI(this.state.textForPOI)}
                   >
                     <Text style={styles.btntext}>Add bespoke POI</Text>
                   </Button>
+
+                  {/* <Button title="Load Images" style={styles.poibtn} onPress={this._handleButtonPress.bind(this)}>
+                    <Text style={styles.btntext}>Choose an image</Text>
+                  </Button> */}
 
 
                 </KeyboardAvoidingView>
