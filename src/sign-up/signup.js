@@ -100,9 +100,9 @@ export default class SignupScreen extends Component {
                   lastname: this.state.lastnameValue,
                   email: this.state.emailAddressValue,
                   company_name: this.state.companyNameValue,
-                  country_code: "UK",
+                  country_code: DeviceInfo.getDeviceCountry(),
                   sp_id: "NSW",
-                  tz_id: "UTC"
+                  tz_id: DeviceInfo.getTimezone()
                 }),
             })
             .then((response) => response.json())
