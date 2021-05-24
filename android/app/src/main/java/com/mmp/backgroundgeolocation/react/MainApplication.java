@@ -3,8 +3,8 @@ package com.mmp.backgroundgeolocation.react;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.swmansion.gesturehandler.RNGestureHandlerPackage;
-
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.transistorsoft.rnbackgroundgeolocation.*;
 
 import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
@@ -32,6 +32,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
             new RNBackgroundGeolocation(),
             new RNBackgroundFetchPackage(),
             new MapsPackage(),

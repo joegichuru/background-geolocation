@@ -10,7 +10,7 @@ import {
   KeyboardAvoidingView,
   CameraRoll,
   Image,
-  PermissionsAndroid 
+  PermissionsAndroid
 } from 'react-native';
 
 import AsyncStorage from '@react-native-community/async-storage';
@@ -21,14 +21,14 @@ import email from 'react-native-email'
 
 import { NavigationActions, StackActions } from 'react-navigation';
 
-import { 
+import {
   Container,
   Button, Icon,
   Text,
   Header, Footer, Title, FooterTab,
-  Content, 
+  Content,
   Left, Body, Right,
-  Switch 
+  Switch
 } from 'native-base';
 
 // react-native-maps
@@ -36,6 +36,7 @@ import MapView, {Polyline} from 'react-native-maps';
 import {PROVIDER_GOOGLE} from 'react-native-maps';
 
 import BackgroundGeolocation from '../react-native-background-geolocation-android';
+import ConsentModal from "../advanced/ConsentModal";
 
 const LATITUDE_DELTA = 0.00922;
 const LONGITUDE_DELTA = 0.00421;
@@ -83,6 +84,8 @@ export default class SimpleMap extends Component<{}> {
 }
 
   async componentDidMount() {
+    //todo to show modal comment this out
+   // this.consentModal.show()
     // Step 1:  Listen to events:
     BackgroundGeolocation.on('location', this.onLocation.bind(this));
     BackgroundGeolocation.on('motionchange', this.onMotionChange.bind(this));
@@ -131,13 +134,13 @@ export default class SimpleMap extends Component<{}> {
       });
     });
 
-    AsyncStorage.getItem('@mmp:enabled', (err, item) => { 
+    AsyncStorage.getItem('@mmp:enabled', (err, item) => {
       this.setState({enabled: (item == 'true')});
       if(this.state.enabled && !this.state.paused && !this.state.componentStarted)
         this.onStartTracking(null);
     });
 
-    AsyncStorage.getItem('@mmp:paused', (err, item) => { 
+    AsyncStorage.getItem('@mmp:paused', (err, item) => {
       this.setState({paused: (item == 'true')});
       if(this.state.enabled && !this.state.paused && !this.state.componentStarted)
         this.onStartTracking(null);
@@ -146,7 +149,7 @@ export default class SimpleMap extends Component<{}> {
     AsyncStorage.getItem('@mmp:locations', (err, item) => this.loadLocationsFromStorage(item));
     AsyncStorage.getItem('@mmp:old_tracks', (err, item) => this.loadOldTracksFromStorage(item));
 
-    AsyncStorage.getItem('@mmp:auth_token', (err, item) => { 
+    AsyncStorage.getItem('@mmp:auth_token', (err, item) => {
       this.setState({auth_token: item});
       BackgroundGeolocation.ready({
 
@@ -174,7 +177,7 @@ export default class SimpleMap extends Component<{}> {
     });
 
     try {
-      await AsyncStorage.getItem('@mmp:job_id', (err, item) => { 
+      await AsyncStorage.getItem('@mmp:job_id', (err, item) => {
         this.setState({
           jobPolygons: [],
           jobPolygonsCoordinates: []
@@ -214,28 +217,28 @@ export default class SimpleMap extends Component<{}> {
                   AsyncStorage.setItem('@mmp:user_id', responseJson.d.user.user_id.toString());
               }
               else {
-                this.onClickNavigate('LoginScreen');    
+                this.onClickNavigate('LoginScreen');
               }
           })
           .catch((error) =>{
               console.error(error);
-              this.onClickNavigate('LoginScreen');    
+              this.onClickNavigate('LoginScreen');
           });
     })});
   }
 
   onClickNavigate(routeName) {
-    navigateAction = NavigationActions.navigate({
+    const navigateAction = NavigationActions.navigate({
         routeName: routeName,
         params: { username: this.state.username },
     });
-    this.props.navigation.dispatch(navigateAction);        
+    this.props.navigation.dispatch(navigateAction);
   }
 
 
   /**
   * @event location;
-  * 
+  *
   */
   onLocation(location) {
     if (!location.sample) {
@@ -261,7 +264,7 @@ export default class SimpleMap extends Component<{}> {
     this.setState({
       isMoving: event.isMoving
     });
-    let location = event.location;    
+    let location = event.location;
   }
   /**
   * @event activitychange
@@ -286,7 +289,7 @@ export default class SimpleMap extends Component<{}> {
     AsyncStorage.getItem('@mmp:POIs', (err, item) => this.addPOIToStorage(item, this.state.lastKnownLocation, newPOIName));
     let markers = this.state.markers;
     markers.push({label: newPOIName, coordinate: this.state.lastKnownLocation.coords});
-    this.setState({markers: markers});    
+    this.setState({markers: markers});
   }
 
   addPOIToStorage(existingPOIsString, newPOIPosition, newPOIName) {
@@ -295,7 +298,7 @@ export default class SimpleMap extends Component<{}> {
       existingPOIsString = '';
     if(existingPOIsString.length > 0)
       existingPOIsString += ',\n'
-    newPOIsString = existingPOIsString + '{"Latitude":"' + newPOIPosition.coords.latitude.toString() + '","Longitude":"' + newPOIPosition.coords.longitude.toString() + '","Timestamp":"' + timestampFormatted + '", "Name": "' + newPOIName + '"}';
+    const newPOIsString = existingPOIsString + '{"Latitude":"' + newPOIPosition.coords.latitude.toString() + '","Longitude":"' + newPOIPosition.coords.longitude.toString() + '","Timestamp":"' + timestampFormatted + '", "Name": "' + newPOIName + '"}';
     AsyncStorage.setItem("@mmp:POIs", newPOIsString);
   }
 
@@ -314,7 +317,7 @@ export default class SimpleMap extends Component<{}> {
         });
         this.setState({isFollowingUser:true});
       }
-    );    
+    );
   }
 
   onStartTracking(value) {
@@ -325,7 +328,7 @@ export default class SimpleMap extends Component<{}> {
       });
       let isMoving = true;
       this.setState({isMoving: isMoving});
-      BackgroundGeolocation.changePace(isMoving);          
+      BackgroundGeolocation.changePace(isMoving);
     });
 
     this.setState({
@@ -356,7 +359,7 @@ export default class SimpleMap extends Component<{}> {
     });
 
     AsyncStorage.setItem("@mmp:enabled", 'false');
-    AsyncStorage.setItem("@mmp:paused", 'true');    
+    AsyncStorage.setItem("@mmp:paused", 'true');
 
     BackgroundGeolocation.stop();
   }
@@ -372,7 +375,7 @@ export default class SimpleMap extends Component<{}> {
 
     AsyncStorage.setItem("@mmp:enabled", 'false');
     AsyncStorage.setItem("@mmp:paused", 'false');
-    
+
     var locationsFormatted = [];
     let locations = await BackgroundGeolocation.getLocations();
     for(var i = 0; i < locations.length; i++)
@@ -380,7 +383,7 @@ export default class SimpleMap extends Component<{}> {
       var timestampFormatted = locations[i].timestamp.replace('T', ' ').replace('Z', '').substring(0, 19);
 
       var pointInString = JSON.stringify(locations[i]);
-  
+
       locationsFormatted.push({ lat: locations[i].latitude, lon: locations[i].longitude, alt: locations[i].altitude, datetime: timestampFormatted });
     }
 
@@ -525,7 +528,7 @@ export default class SimpleMap extends Component<{}> {
         body: fileContent
     }).catch(console.error);
   }
-  
+
   onResetMarkers() {
     this.setState({
       coordinates: [],
@@ -547,7 +550,7 @@ export default class SimpleMap extends Component<{}> {
   {
       return ('0' + input.toString()).slice(-2);
   }
-    
+
   stringifyTime(timeInput)
   {
     let timeString =  timeInput.getUTCFullYear().toString() + '-' +
@@ -598,7 +601,7 @@ export default class SimpleMap extends Component<{}> {
 
   loadLocationsFromStorage(locationsJson) {
     if(locationsJson) {
-      let locations = JSON.parse(locationsJson).locations;    
+      let locations = JSON.parse(locationsJson).locations;
       if(locations)
         this.setState({ coordinates: locations });
     }
@@ -608,7 +611,7 @@ export default class SimpleMap extends Component<{}> {
 
   loadOldTracksFromStorage(oldTracksJson) {
     if(oldTracksJson) {
-      let oldTracks = JSON.parse(oldTracksJson).old_tracks;    
+      let oldTracks = JSON.parse(oldTracksJson).old_tracks;
       if(oldTracks)
         this.setState({ oldTracks: oldTracks });
     }
@@ -652,11 +655,11 @@ export default class SimpleMap extends Component<{}> {
     var auth_token = "";
 
     await AsyncStorage.getItem('@mmp:auth_token', (err, item) => auth_token = item);
-        
+
     this.setState({
       jobId: jobId,
       auth_token: auth_token
-    });        
+    });
 
     fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/GetJob', {
         method: 'POST',
@@ -690,7 +693,7 @@ export default class SimpleMap extends Component<{}> {
           points = [];
         }
 
-        trackIDs = [];
+        const trackIDs = [];
         for(var i = 0; i < responseJson.d.tracks.length; i++) {
           trackIDs.push(parseInt(responseJson.d.tracks[i].track_id, 10));
         }
@@ -710,7 +713,7 @@ export default class SimpleMap extends Component<{}> {
 
         this.setState({
           statusMessage: 'Job ' + jobId.toString() + ' loaded with ' + this.state.jobPolygons.length.toString() + ' polygons',
-        });        
+        });
     })
     .catch((error) =>{
     });
@@ -774,7 +777,7 @@ export default class SimpleMap extends Component<{}> {
     var geom_str = '';
     var i = 0;
     while(true) {
-      currentPolygon = polygons[i].points;
+      const currentPolygon = polygons[i].points;
       var j = 0;
       geom_str += '(';
       while(true) {
@@ -843,16 +846,16 @@ export default class SimpleMap extends Component<{}> {
 
   toHHMMSS(sec_num) {
     if(sec_num == 0)
-      return ''; 
+      return '';
     var hours   = Math.floor(sec_num / 3600);
     var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
     var seconds = Math.floor(sec_num - (hours * 3600) - (minutes * 60));
 
-    hoursStr = hours.toString();
+    let hoursStr = hours.toString();
     if (hours   < 10) {hoursStr = "0"+hoursStr;}
-    minutesStr = minutes.toString();
+    let minutesStr = minutes.toString();
     if (minutes < 10) {minutesStr = "0"+minutesStr;}
-    secondsStr = seconds.toString();
+    let  secondsStr = seconds.toString();
     if (seconds < 10) {secondsStr = "0"+secondsStr;}
     return hoursStr+':'+minutesStr+':'+secondsStr;
   }
@@ -890,6 +893,10 @@ export default class SimpleMap extends Component<{}> {
   render() {
     return (
       <Container style={styles.container}>
+        <ConsentModal ref={ref=>this.consentModal=ref} onAgree={()=>{
+        //do something
+        }
+        }/>
         <View style={styles.viewincontainer}>
           <Button onPress={() => this.setModalVisible(!this.state.modalVisible)} style={{zIndex: 100, backgroundColor: 'rgba(255, 255, 255, 0.8)', position: 'absolute', top: 25, left: 5}}>
             <Icon name='md-stats' style={{color: 'orange', backgroundColor: 'transparent'}}/>
@@ -1048,16 +1055,16 @@ export default class SimpleMap extends Component<{}> {
                     <Text style={styles.btntext}>One letterbox in the building</Text>
                   </Button>
 
-                  <TextInput 
+                  <TextInput
                     style={styles.textinput}
                     multiline={false}
                     underlineColorAndroid="transparent"
                     onChangeText={(text) => this.setState({textForPOI: text})}
                     value={this.state.textForPOI}
                     placeholder = 'POI description'
-                  />       
+                  />
                   <Button
-                    style={styles.poibtn} title='Add bespoke POI' 
+                    style={styles.poibtn} title='Add bespoke POI'
                     onPress={() => this.onEnteredPOI(this.state.textForPOI)}
                   >
                     <Text style={styles.btntext}>Add bespoke POI</Text>
@@ -1147,7 +1154,7 @@ var styles = StyleSheet.create({
   },
   footer: {
     backgroundColor: 'white',
-    paddingLeft: 10, 
+    paddingLeft: 10,
     paddingRight: 10
   },
   footertext: {

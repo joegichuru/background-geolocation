@@ -18,18 +18,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { NavigationActions, StackActions } from 'react-navigation';
 
-import { 
+import {
     Container,
     StyleProvider
     // Header, Footer, Title,
-    // Content, 
+    // Content,
     // Left, Body, Right,
-    // Switch 
+    // Switch
   } from 'native-base';
 
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';  
-  
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 export default class RegistrationSuccess extends Component {
     constructor(props) {
         super(props);
@@ -53,11 +53,11 @@ export default class RegistrationSuccess extends Component {
     }
 
     onClickNavigate(routeName) {
-        navigateAction = NavigationActions.navigate({
+        const navigateAction = NavigationActions.navigate({
             routeName: routeName,
             params: { username: this.state.username },
         });
-        this.props.navigation.dispatch(navigateAction);        
+        this.props.navigation.dispatch(navigateAction);
     }
 
 
@@ -71,7 +71,7 @@ render() {
                 <Text style={styles.h3}>
                     {this.state.welcomeMessage}
                 </Text>
-                
+
                 <Text>
                     Your registration was successful. <Text onPress={() => Linking.openURL("http://managemypost.com/support/")} style = {{ color: '#00f' }}>Click here</Text> to get info about getting started with MMP, or press "OK" to start tracking.
                 </Text>

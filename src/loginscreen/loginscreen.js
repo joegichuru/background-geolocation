@@ -33,7 +33,7 @@ export default class LoginScreen extends Component {
             loginError: false,
             loginErrorMessage: null
         }
-        
+
     }
 
     async componentDidMount() {
@@ -58,7 +58,7 @@ export default class LoginScreen extends Component {
                 loggingIn: true,
                 loginError: false,
                 loginErrorMessage: null
-            });                          
+            });
 
             fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/AuthRequest', {
                 method: 'POST',
@@ -81,14 +81,14 @@ export default class LoginScreen extends Component {
                     AsyncStorage.setItem('@mmp:user_id', responseJson.d.user.user_id.toString());
                     AsyncStorage.setItem('mmp_username', this.state.usernameValue);
                     AsyncStorage.setItem('mmp_password', this.state.passwordValue);
-                    this.onClickNavigate('StartPage');    
+                    this.onClickNavigate('StartPage');
                 }
                 else {
                     this.setState({
                         loggingIn: false,
                         loginError: true,
                         loginErrorMessage: 'Login failed'
-                    });                    
+                    });
                 }
             })
             .catch((error) =>{
@@ -97,19 +97,19 @@ export default class LoginScreen extends Component {
                     loggingIn: false,
                     loginError: true,
                     loginErrorMessage: error
-                });                          
+                });
             });
-        }        
+        }
 
 
     onClickNavigate(routeName) {
-        navigateAction = NavigationActions.navigate({
+        const navigateAction = NavigationActions.navigate({
             routeName: routeName,
             params: { username: this.state.username },
-        });  
-        this.props.navigation.dispatch(navigateAction);        
+        });
+        this.props.navigation.dispatch(navigateAction);
     }
-        
+
 render() {
     return (
             <KeyboardAvoidingView style={styles.container} behavior="padding" enabled>

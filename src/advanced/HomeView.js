@@ -47,6 +47,7 @@ import App from '../App';
 import {COLORS, SOUNDS} from './lib/config';
 import SettingsView from './SettingsView';
 import SettingsService from './lib/SettingsService';
+import ConsentModal from "./ConsentModal";
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 const STATIONARY_REGION_FILL_COLOR = "rgba(200,0,0,0.2)"
@@ -114,6 +115,7 @@ export default class HomeView extends Component<{}> {
 
     // Fetch BackgroundGeolocation current state and use that as our config object.  we use the config as persisted by the
     // Settings screen to configure the plugin.
+    //ask user for consent first for playstore compliance
 
     this.configureBackgroundGeolocation();
 
@@ -1000,10 +1002,18 @@ var styles = StyleSheet.create({
   status: {
     fontSize: 12
   },
+  // markerIcon: {
+  //   borderWidth:1,
+  //   borderColor:'#000000',
+  //   backgroundColor: 'rgba(0,179,253, 0.6)',
+  //   width: 10,
+  //   height: 10,
+  //   borderRadius: 5
+  // },
   markerIcon: {
     borderWidth:1,
     borderColor:'#000000',
-    backgroundColor: 'rgba(0,179,253, 0.6)',
+    backgroundColor: COLORS.polyline_color,
     width: 10,
     height: 10,
     borderRadius: 5
@@ -1026,14 +1036,7 @@ var styles = StyleSheet.create({
     width: 12,
     height:12
   },
-  markerIcon: {
-    borderWidth:1,
-    borderColor:'#000000',
-    backgroundColor: COLORS.polyline_color,
-    width: 10,
-    height: 10,
-    borderRadius: 5
-  },
+
   // Map Menu on top-right.  What a pain to style this thing...
   mapMenu: {
     position:'absolute',

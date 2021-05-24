@@ -12,8 +12,7 @@ import HomeView from './HomeView';
 import SettingsView from './SettingsView';
 import GeofenceView from './GeofenceView';
 import AboutView from './AboutView';
-
-export default AdvancedApp = createStackNavigator({
+const AdvancedApp = createStackNavigator({
   Home: {
     screen: HomeView
   },
@@ -29,5 +28,6 @@ export default AdvancedApp = createStackNavigator({
 }, {
   initialRouteName: 'Login',
   headerMode: 'none',
-  mode: 'modal'  
+  mode: 'modal'
 });
+export default AdvancedApp

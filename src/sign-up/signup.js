@@ -43,7 +43,7 @@ export default class SignupScreen extends Component {
         }
     }
 
-    async componentDidMount() {    
+    async componentDidMount() {
         AsyncStorage.getItem('mmp_username').then((value) => {this.setState({usernameValue: value || ''})});
         AsyncStorage.getItem('mmp_password').then((value) => {this.setState({passwordValue: value || ''})});
         AsyncStorage.setItem("@mmp:next_page", 'LoginScreen');
@@ -83,7 +83,7 @@ export default class SignupScreen extends Component {
                 loggingIn: true,
                 loginError: false,
                 registerErrorMessage: null
-            });                          
+            });
 
             fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/RegisterRequest', {
                 method: 'POST',
@@ -114,7 +114,7 @@ export default class SignupScreen extends Component {
                     AsyncStorage.setItem('@mmp:user_id', responseJson.d.auth_response.user.user_id.toString());
                     AsyncStorage.setItem('mmp_username', this.state.usernameValue);
                     AsyncStorage.setItem('mmp_password', this.state.passwordValue);
-                    this.onClickNavigate('RegistrationSuccess');    
+                    this.onClickNavigate('RegistrationSuccess');
                 }
                 else {
                     this.setState({
@@ -136,16 +136,16 @@ export default class SignupScreen extends Component {
                     loggingIn: false,
                     loginError: true,
                     registerErrorMessage: error
-                });                          
+                });
             });
-        }        
+        }
 
     onClickNavigate(routeName) {
-        navigateAction = NavigationActions.navigate({
+       const navigateAction = NavigationActions.navigate({
             routeName: routeName,
             params: { username: this.state.username },
-        });  
-        this.props.navigation.dispatch(navigateAction);        
+        });
+        this.props.navigation.dispatch(navigateAction);
     }
 
     validateEmailAddress(text) {
@@ -157,7 +157,7 @@ export default class SignupScreen extends Component {
 
     doFormValidation() {
         console.log("MMP-Tracker - " + this.state.firstnameValue);
-        this.setState({formValid: 
+        this.setState({formValid:
             (this.state.usernameValue.length >= 4 &&
             this.state.passwordValue.length >= 6 && (this.state.passwordValue.localeCompare(this.state.confirmPasswordValue) == 0) &&
             this.validateEmailAddress(this.state.emailAddressValue) &&
