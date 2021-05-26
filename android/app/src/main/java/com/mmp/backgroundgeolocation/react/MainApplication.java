@@ -3,13 +3,13 @@ package com.mmp.backgroundgeolocation.react;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.transistorsoft.rnbackgroundgeolocation.*;
 
 import com.transistorsoft.rnbackgroundfetch.RNBackgroundFetchPackage;
 import com.airbnb.android.react.maps.MapsPackage;
-import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import im.shimo.react.prompt.RNPromptPackage;
 import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.facebook.react.ReactNativeHost;
@@ -32,12 +32,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AsyncStoragePackage(),
             new VectorIconsPackage(),
             new RNBackgroundGeolocation(),
             new RNBackgroundFetchPackage(),
             new MapsPackage(),
             new RNGestureHandlerPackage(),
-            new AsyncStoragePackage(),
             new RNPromptPackage(),
             new RNDeviceInfo()
       );

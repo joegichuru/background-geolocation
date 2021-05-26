@@ -37,7 +37,6 @@ target 'BGGeolocation' do
 
   # @see https://github.com/facebook/react-native/issues/20492#issuecomment-422958184
 
-  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
@@ -60,6 +59,8 @@ target 'BGGeolocation' do
   pod 'react-native-safe-area-context', :path => '../node_modules/react-native-safe-area-context'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
+  pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-community/async-storage'
 
   target 'BGGeolocationTests' do
     inherit! :search_paths
