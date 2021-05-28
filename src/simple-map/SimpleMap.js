@@ -86,6 +86,28 @@ export default class SimpleMap extends Component<{}> {
   async componentDidMount() {
     //todo to show modal comment this out
    // this.consentModal.show()
+    this.showConsent();
+  }
+  showConsent=()=>{
+    this.showStatus().then(item=>{
+      if(item){
+        this.setUpBackgroundLocation()
+      }else {
+        this.consentModal.show(()=>{
+          AsyncStorage.setItem("consent",'true')
+          this.setUpBackgroundLocation()
+        })
+      }
+    }).catch(error=>{
+      console.log(error)
+      this.setUpBackgroundLocation()
+    })
+  }
+  showStatus= async ()=>{
+    return await AsyncStorage.getItem("consent")
+  }
+
+  setUpBackgroundLocation= async ()=>{
     // Step 1:  Listen to events:
     BackgroundGeolocation.on('location', this.onLocation.bind(this));
     BackgroundGeolocation.on('motionchange', this.onMotionChange.bind(this));
@@ -177,7 +199,7 @@ export default class SimpleMap extends Component<{}> {
     });
 
     try {
-      await AsyncStorage.getItem('@mmp:job_id', (err, item) => {
+      AsyncStorage.getItem('@mmp:job_id', (err, item) => {
         this.setState({
           jobPolygons: [],
           jobPolygonsCoordinates: []
@@ -194,38 +216,38 @@ export default class SimpleMap extends Component<{}> {
     }
 
     AsyncStorage.getItem('mmp_username')
-      .then((mmp_username) => {
-        AsyncStorage.getItem('mmp_password')
-        .then((mmp_password) => {
-          fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/AuthRequest', {
-            method: 'POST',
-            headers: {
-              Accept: 'application/json',
-              'Content-Type': 'application/json; charset=utf-8;',
-              'Data-Type': 'json'
-            },
-            body: JSON.stringify({
-              username: mmp_username,
-              password: mmp_password,
-              device_id: DeviceInfo.getUniqueID()
-            }),
-          })
-          .then((response) => response.json())
-          .then((responseJson) => {
-              if(responseJson.d.auth_result == 0) {
-                  AsyncStorage.setItem('@mmp:auth_token', responseJson.d.token);
-                  AsyncStorage.setItem('@mmp:user_id', responseJson.d.user.user_id.toString());
-              }
-              else {
-                this.onClickNavigate('LoginScreen');
-              }
-          })
-          .catch((error) =>{
-              console.error(error);
-              this.onClickNavigate('LoginScreen');
-          });
-    })});
-  }
+        .then((mmp_username) => {
+          AsyncStorage.getItem('mmp_password')
+              .then((mmp_password) => {
+                fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/AuthRequest', {
+                  method: 'POST',
+                  headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json; charset=utf-8;',
+                    'Data-Type': 'json'
+                  },
+                  body: JSON.stringify({
+                    username: mmp_username,
+                    password: mmp_password,
+                    device_id: DeviceInfo.getUniqueID()
+                  }),
+                })
+                    .then((response) => response.json())
+                    .then((responseJson) => {
+                      if(responseJson.d.auth_result == 0) {
+                        AsyncStorage.setItem('@mmp:auth_token', responseJson.d.token);
+                        AsyncStorage.setItem('@mmp:user_id', responseJson.d.user.user_id.toString());
+                      }
+                      else {
+                        this.onClickNavigate('LoginScreen');
+                      }
+                    })
+                    .catch((error) =>{
+                      console.error(error);
+                      this.onClickNavigate('LoginScreen');
+                    });
+              })});
+}
 
   onClickNavigate(routeName) {
     const navigateAction = NavigationActions.navigate({

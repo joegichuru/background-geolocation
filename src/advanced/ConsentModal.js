@@ -4,11 +4,12 @@ import {Button} from "react-native-elements";
 
 export default class ConsentModal extends React.Component {
     state = {
-        visible: false
+        visible: false,
+        agree:()=>{}
     }
 
-    show=()=>{
-        this.setState({visible:true})
+    show=(agree)=>{
+        this.setState({visible:true,agree:agree})
     }
 
     render() {
@@ -36,8 +37,8 @@ export default class ConsentModal extends React.Component {
                             your
                             precise route and for geofencing conformity.</Text>
                         <Button onPress={() => {
+                            this.state.agree()
                             this.setState({visible: false})
-                            this.props.onAgree()
                         }} type={'solid'} title={'Agree'}/>
                     </View>
                 </View>

@@ -9,7 +9,7 @@ import {
 
 // For posting to tracker.transistorsoft.com
 import DeviceInfo from 'react-native-device-info';
-
+import AsyncStorage from "@react-native-community/async-storage";
 import ActionButton from 'react-native-action-button';
 
 // Import native-base UI components
@@ -112,19 +112,52 @@ export default class HomeView extends Component<{}> {
   }
 
   componentDidMount() {
+    console.log("start tracking")
+    this.showConsent()
+  }
 
-    // Fetch BackgroundGeolocation current state and use that as our config object.  we use the config as persisted by the
-    // Settings screen to configure the plugin.
-    //ask user for consent first for playstore compliance
+  showConsent=()=>{
+    this.showStatus().then(item=>{
+      if(item){
+        // Fetch BackgroundGeolocation current state and use that as our config object.  we use the config as persisted by the
+        // Settings screen to configure the plugin.
+        //ask user for consent first for playstore compliance
 
-    this.configureBackgroundGeolocation();
+        this.configureBackgroundGeolocation();
 
-    // Fetch current app settings state.
-    this.settingsService.getApplicationState((state) => {
-      this.setState({
-        settings: state
+        // Fetch current app settings state.
+        this.settingsService.getApplicationState((state) => {
+          this.setState({
+            settings: state
+          });
+        });
+      }else {
+        this.consentModal.show(()=>{
+          AsyncStorage.setItem("consent",true)
+          this.configureBackgroundGeolocation();
+
+          // Fetch current app settings state.
+          this.settingsService.getApplicationState((state) => {
+            this.setState({
+              settings: state
+            });
+          });
+        })
+      }
+    }).catch(error=>{
+      console.log(error)
+      this.configureBackgroundGeolocation();
+
+      // Fetch current app settings state.
+      this.settingsService.getApplicationState((state) => {
+        this.setState({
+          settings: state
+        });
       });
-    });
+    })
+  }
+  showStatus= async ()=>{
+    return await AsyncStorage.getItem("consent")
   }
 
   componentWillUnmount() {
@@ -605,6 +638,7 @@ export default class HomeView extends Component<{}> {
   render() {
     return (
       <Container style={styles.container}>
+        <ConsentModal ref={ref=>this.consentModal=ref}/>
         <Header style={styles.header}>
           <Left>
             <Button transparent onPress={this.onClickHome.bind(this)}>
