@@ -211,6 +211,13 @@ export default class HomeView extends Component<{}> {
       startOnBoot: true,
       heartbeatInterval: 60,
       enabledHeadless: true,
+      locationAuthorizationRequest: 'Always',
+      backgroundPermissionRationale: {
+        title: "Allow MMP Tracker to access this device's location even when closed or not in use.",
+        message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+        positiveAction: 'Allow',
+        negativeAction: 'Cancel'
+      },
       params: {
         device: {
           uuid: DeviceInfo.getUniqueID(),
