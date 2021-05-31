@@ -124,6 +124,12 @@ export default class SimpleMap extends Component<{}> {
       fastestLocationUpdateInterval: 3000,
       notificationText: "",
       allowIdenticalLocations: true,
+      backgroundPermissionRationale: {
+        title: "Allow MMP Tracker to access this device's location even when closed or not in use.",
+        message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
+        positiveAction: 'Allow',
+        negativeAction: 'Cancel'
+      },
       params: {
         // Required for tracker.transistorsoft.com
         device: {

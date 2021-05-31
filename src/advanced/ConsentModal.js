@@ -1,6 +1,8 @@
 import React from 'react'
-import {Modal, Text, View} from "react-native";
+import {Image, Modal, Platform, BackHandler,Text, TouchableWithoutFeedback, View} from "react-native";
 import {Button} from "react-native-elements";
+import route from '../../images/route.png'
+import Icon from "./Icon";
 
 export default class ConsentModal extends React.Component {
     state = {
@@ -18,28 +20,73 @@ export default class ConsentModal extends React.Component {
                 <View style={{
                     flex: 1,
                     alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'rgba(0,0,0,.6)'
+                    backgroundColor: 'rgba(255,255,255,.95)',
+                    paddingTop:40
                 }
                 }>
                     <View style={{
-                        backgroundColor: 'white',
-                        borderRadius: 10,
-                        padding: 10,
-                        alignSelf: 'center',
-                        margin: 20
+                        backgroundColor:'#eee',
+                        borderRadius:20,
+                        width:40,
+                        height:40,
+                        alignItems:'center',
+                        justifyContent:'center'
                     }}>
+                        <Icon name={'location'} type={'EvilIcons'} color={'#aaa'} size={32}/>
+                    </View>
+
+                    <Text style={{
+                        fontSize:20,
+                        fontWeight:'bold',
+                        color:'black'
+                    }}>Use your Location</Text>
+                    <Text style={{
+                        marginHorizontal:20,
+                        marginVertical:10,
+                        fontSize:16,
+                        color:'#444'
+                    }}>To see maps for automatically tracked activities, allow MMP Tracker to use your location all the time.</Text>
+                    <Text style={{
+                        marginHorizontal:20,
+                        marginVertical:10,
+                        fontSize:16,
+                        color:'#444'
+                    }}>MMP Tracker will use your location in the background to </Text>
+                    <Image source={route} style={{
+                        width:220,
+                        height:220,
+                        borderRadius:10,
+                        overflow:'hidden',
+                        margin:20
+                    }}/>
+                    <View style={{
+                        position:'absolute',
+                        bottom:0,
+                        left:0,
+                        right:0,
+                        justifyContent:'space-between',
+                        margin:40,
+                        flexDirection:'row'
+                    }}>
+                        <TouchableWithoutFeedback onPress={()=>{
+                            BackHandler.exitApp();
+                        }}>
                         <Text style={{
-                            fontSize: 16,
-                            marginVertical: 10,
-                            color: 'black'
-                        }}>MMP Tracker will use your background location to track your movement in order to generate
-                            your
-                            precise route and for geofencing conformity.</Text>
-                        <Button onPress={() => {
-                            this.state.agree()
-                            this.setState({visible: false})
-                        }} type={'solid'} title={'Agree'}/>
+                            color:'#134F98',
+                            fontWeight:'bold',
+                            fontSize:16
+                        }}>No Thanks</Text>
+                        </TouchableWithoutFeedback>
+                       <TouchableWithoutFeedback onPress={()=>{
+                           this.state.agree();
+                           this.setState({visible:false})
+                       }}>
+                           <Text style={{
+                               color:'#134F98',
+                               fontWeight:'bold',
+                               fontSize:16
+                           }}>Turn On</Text>
+                       </TouchableWithoutFeedback>
                     </View>
                 </View>
             </Modal>
