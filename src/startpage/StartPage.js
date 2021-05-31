@@ -17,18 +17,18 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import { NavigationActions, StackActions } from 'react-navigation';
 
-import { 
+import {
     Container,
     StyleProvider
     // Header, Footer, Title,
-    // Content, 
+    // Content,
     // Left, Body, Right,
-    // Switch 
+    // Switch
   } from 'native-base';
 
 import { Button } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';  
-  
+import Icon from 'react-native-vector-icons/FontAwesome';
+
 export default class StartPage extends Component {
     constructor(props) {
         super(props);
@@ -41,12 +41,12 @@ export default class StartPage extends Component {
             jobListLoaded: false
         }
     }
-    
+
     async componentDidMount() {
         AsyncStorage.getItem('mmp_username').then((value) => {this.setState({usernameValue: value.toString().toLowerCase()})});
 
-        onLoginPressButton = () => {
-            this.onClickNavigate('SimpleMap');    
+        const onLoginPressButton = () => {
+            this.onClickNavigate('SimpleMap');
         }
         AsyncStorage.setItem("@mmp:next_page", 'StartPage');
     }
@@ -70,16 +70,16 @@ export default class StartPage extends Component {
             this.onClickNavigate('SimpleMap');
         }
         catch(exception) {
-        }        
+        }
         this.onClickNavigate('SimpleMap');
     }
 
     onClickNavigate(routeName) {
-        navigateAction = NavigationActions.navigate({
+       const navigateAction = NavigationActions.navigate({
             routeName: routeName,
             params: { username: this.state.username },
         });
-        this.props.navigation.dispatch(navigateAction);        
+        this.props.navigation.dispatch(navigateAction);
     }
 
     async LoadJobs() {
@@ -87,7 +87,7 @@ export default class StartPage extends Component {
         var user_id = "";
         await AsyncStorage.getItem('@mmp:auth_token', (err, item) => auth_token = item);
         await AsyncStorage.getItem('@mmp:user_id', (err, item) => user_id = item);
-            
+
         fetch('https://managemyapiclone.azurewebsites.net/Mobile.asmx/GetJobs', {
             method: 'POST',
             headers: {
@@ -121,13 +121,13 @@ render() {
         <ImageBackground style={styles.container}>
 
             <ScrollView style={styles.scrollview}>
-    
+
                 <Button
                     buttonStyle={{backgroundColor: 'orange', borderRadius: 10, margin: 10}}
                     title='Select a job from list' onPress={this.LoadJobs.bind(this)} disabled={this.state.jobList.length !== 0}
                 >
                 </ Button>
-            
+
                 {this.state.jobList.map((job) => (
                     <Button
                     key={job.job_id}
@@ -136,10 +136,10 @@ render() {
                     >
                     </ Button>))
                 }
-    
+
                 <View style={{flexDirection:"row"}}>
                     <View style={{flex:1}}>
-                        <TextInput 
+                        <TextInput
                         style={styles.textinput}
                         keyboardType='numeric'
                         multiline={false}
@@ -147,7 +147,7 @@ render() {
                         onChangeText={(text) => this.setState({jobIdText: text})}
                         value={this.state.jobIdText}
                         placeholder = 'Enter a job ID'
-                        /> 
+                        />
                     </View>
                     <View style={{flex:1}}>
                         <Button

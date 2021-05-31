@@ -9,7 +9,7 @@ import {
 
 // For posting to tracker.transistorsoft.com
 import DeviceInfo from 'react-native-device-info';
-
+import AsyncStorage from "@react-native-community/async-storage";
 import ActionButton from 'react-native-action-button';
 
 // Import native-base UI components
@@ -47,6 +47,7 @@ import App from '../App';
 import {COLORS, SOUNDS} from './lib/config';
 import SettingsView from './SettingsView';
 import SettingsService from './lib/SettingsService';
+import ConsentModal from "./ConsentModal";
 
 const TRACKER_HOST = 'http://tracker.transistorsoft.com/locations/';
 const STATIONARY_REGION_FILL_COLOR = "rgba(200,0,0,0.2)"
@@ -111,18 +112,52 @@ export default class HomeView extends Component<{}> {
   }
 
   componentDidMount() {
+    console.log("start tracking")
+    this.showConsent()
+  }
 
-    // Fetch BackgroundGeolocation current state and use that as our config object.  we use the config as persisted by the
-    // Settings screen to configure the plugin.
+  showConsent=()=>{
+    this.showStatus().then(item=>{
+      if(item){
+        // Fetch BackgroundGeolocation current state and use that as our config object.  we use the config as persisted by the
+        // Settings screen to configure the plugin.
+        //ask user for consent first for playstore compliance
 
-    this.configureBackgroundGeolocation();
+        this.configureBackgroundGeolocation();
 
-    // Fetch current app settings state.
-    this.settingsService.getApplicationState((state) => {
-      this.setState({
-        settings: state
+        // Fetch current app settings state.
+        this.settingsService.getApplicationState((state) => {
+          this.setState({
+            settings: state
+          });
+        });
+      }else {
+        this.consentModal.show(()=>{
+          AsyncStorage.setItem("consent",true)
+          this.configureBackgroundGeolocation();
+
+          // Fetch current app settings state.
+          this.settingsService.getApplicationState((state) => {
+            this.setState({
+              settings: state
+            });
+          });
+        })
+      }
+    }).catch(error=>{
+      console.log(error)
+      this.configureBackgroundGeolocation();
+
+      // Fetch current app settings state.
+      this.settingsService.getApplicationState((state) => {
+        this.setState({
+          settings: state
+        });
       });
-    });
+    })
+  }
+  showStatus= async ()=>{
+    return await AsyncStorage.getItem("consent")
   }
 
   componentWillUnmount() {
@@ -603,6 +638,7 @@ export default class HomeView extends Component<{}> {
   render() {
     return (
       <Container style={styles.container}>
+        <ConsentModal ref={ref=>this.consentModal=ref}/>
         <Header style={styles.header}>
           <Left>
             <Button transparent onPress={this.onClickHome.bind(this)}>
@@ -1000,10 +1036,18 @@ var styles = StyleSheet.create({
   status: {
     fontSize: 12
   },
+  // markerIcon: {
+  //   borderWidth:1,
+  //   borderColor:'#000000',
+  //   backgroundColor: 'rgba(0,179,253, 0.6)',
+  //   width: 10,
+  //   height: 10,
+  //   borderRadius: 5
+  // },
   markerIcon: {
     borderWidth:1,
     borderColor:'#000000',
-    backgroundColor: 'rgba(0,179,253, 0.6)',
+    backgroundColor: COLORS.polyline_color,
     width: 10,
     height: 10,
     borderRadius: 5
@@ -1026,14 +1070,7 @@ var styles = StyleSheet.create({
     width: 12,
     height:12
   },
-  markerIcon: {
-    borderWidth:1,
-    borderColor:'#000000',
-    backgroundColor: COLORS.polyline_color,
-    width: 10,
-    height: 10,
-    borderRadius: 5
-  },
+
   // Map Menu on top-right.  What a pain to style this thing...
   mapMenu: {
     position:'absolute',

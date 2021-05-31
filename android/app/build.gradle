@@ -116,8 +116,8 @@ android {
         applicationId "com.mmp.backgroundgeolocation.react"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 307
-        versionName "3.0.7"
+        versionCode 308
+        versionName "3.0.8"
     }
     splits {
         abi {
@@ -167,18 +167,23 @@ repositories {
 }
 
 dependencies {
+    implementation project(':@react-native-community_async-storage')
+    implementation project(':react-native-vector-icons')
+    implementation project(':react-native-safe-area-context')
+    implementation project(':react-native-screens')
     // implementation project(':react-native-background-geolocation')
     // implementation project(':react-native-background-fetch')
     implementation project(':react-native-maps')
     implementation 'com.google.android.gms:play-services-location:16.1.0'
     implementation 'com.google.android.gms:play-services-gcm:16.0.1'
     implementation project(':react-native-gesture-handler')
-    implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-background-geolocation-android')
     implementation project(':react-native-background-fetch')
     compile project(':react-native-prompt-android')
     compile project(':react-native-device-info')
     compile fileTree(dir: "libs", include: ["*.jar"])
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
     compile "com.facebook.react:react-native:+"  // From node_modules
 
