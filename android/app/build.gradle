@@ -116,8 +116,8 @@ android {
         applicationId "com.mmp.backgroundgeolocation.react"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 308
-        versionName "3.0.8"
+        versionCode 309
+        versionName "3.0.9"
     }
     splits {
         abi {

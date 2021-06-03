@@ -214,8 +214,8 @@ export default class HomeView extends Component<{}> {
       locationAuthorizationRequest: 'Always',
       backgroundPermissionRationale: {
         title: "Allow MMP Tracker to access this device's location even when closed or not in use.",
-        message: "This app collects location data to enable recording your trips to work and calculate distance-travelled.",
-        positiveAction: 'Allow',
+        message: "MMP Tracker collects location data to enable recording your work tracks and verify that your job's area is covered by them.",
+        positiveAction: 'Allow background location access"',
         negativeAction: 'Cancel'
       },
       params: {

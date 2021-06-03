@@ -45,13 +45,13 @@ export default class ConsentModal extends React.Component {
                         marginVertical:10,
                         fontSize:16,
                         color:'#444'
-                    }}>To see maps for automatically tracked activities, allow MMP Tracker to use your location all the time.</Text>
+                    }}>Allow MMP Tracker to access this device's location even when closed or not in use</Text>
                     <Text style={{
                         marginHorizontal:20,
                         marginVertical:10,
                         fontSize:16,
                         color:'#444'
-                    }}>MMP Tracker will use your location in the background to </Text>
+                    }}>MMP Tracker collects location data to enable recording your work tracks and verify that your job's area is covered by them.</Text>
                     <Image source={route} style={{
                         width:220,
                         height:220,
