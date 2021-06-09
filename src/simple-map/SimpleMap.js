@@ -84,8 +84,6 @@ export default class SimpleMap extends Component<{}> {
 }
 
   async componentDidMount() {
-    //todo to show modal comment this out
-   // this.consentModal.show()
     this.showConsent();
   }
   showConsent=()=>{
@@ -99,7 +97,6 @@ export default class SimpleMap extends Component<{}> {
         })
       }
     }).catch(error=>{
-      console.log(error)
       this.setUpBackgroundLocation()
     })
   }
@@ -124,6 +121,13 @@ export default class SimpleMap extends Component<{}> {
       fastestLocationUpdateInterval: 3000,
       notificationText: "",
       allowIdenticalLocations: true,
+      locationAuthorizationRequest: 'Always',
+      backgroundPermissionRationale: {
+        title: "Allow MMP Tracker to access this device's location even when closed or not in use.",
+        message: "MMP Tracker collects location data to enable recording your work tracks and verify that your job's area is covered by them.",
+        positiveAction: 'Allow background location access"',
+        negativeAction: 'Cancel'
+      },
       params: {
         // Required for tracker.transistorsoft.com
         device: {
@@ -144,7 +148,6 @@ export default class SimpleMap extends Component<{}> {
       heartbeatInterval: 60,
       forceReloadOnHeartbeat: true,
       minimumActivityRecognitionConfidence: 50,
-
       debug: false,
       logLevel: BackgroundGeolocation.LOG_LEVEL_OFF,
     }, (state) => {
@@ -182,7 +185,13 @@ export default class SimpleMap extends Component<{}> {
         fastestLocationUpdateInterval: 3000,
         notificationText: "",
         allowIdenticalLocations: true,
-
+        locationAuthorizationRequest: 'Always',
+        backgroundPermissionRationale: {
+          title: "Allow MMP Tracker to access this device's location even when closed or not in use.",
+          message: "MMP Tracker collects location data to enable recording your work tracks and verify that your job's area is covered by them.",
+          positiveAction: 'Allow background location access"',
+          negativeAction: 'Cancel'
+        },
         stopOnTerminate: false,
         startOnBoot: true,
         foregroundService: true,
@@ -915,10 +924,7 @@ export default class SimpleMap extends Component<{}> {
   render() {
     return (
       <Container style={styles.container}>
-        <ConsentModal ref={ref=>this.consentModal=ref} onAgree={()=>{
-        //do something
-        }
-        }/>
+        <ConsentModal ref={ref=>this.consentModal=ref}/>
         <View style={styles.viewincontainer}>
           <Button onPress={() => this.setModalVisible(!this.state.modalVisible)} style={{zIndex: 100, backgroundColor: 'rgba(255, 255, 255, 0.8)', position: 'absolute', top: 25, left: 5}}>
             <Icon name='md-stats' style={{color: 'orange', backgroundColor: 'transparent'}}/>
